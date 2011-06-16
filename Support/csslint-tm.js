@@ -5,6 +5,10 @@ var env = process.env || process.ENV,
 	stdout  = process.stdout,
 	CSSLint = require(env.TM_BUNDLE_SUPPORT + "/csslint-node.js").CSSLint;
 
+
+/*
+ * Original version of  an html escape from jshint.tmbundle
+ */
 var entities = {
   '&': '&amp;',
   '"': '&quot;',
@@ -55,11 +59,15 @@ module.exports = function(options) {
 			body += "</div>";
 		});
 	}
+
 	
-    if (body.length > 0) {
-      fs.readFile(__dirname + '/output.html', 'utf8', function(e, html) {
-        sys.puts(html.replace('{body}', body));
-        process.exit(205); //show_html
-      });
-    }
+	/*
+	 * Original version of  writing the error messages to TextMate from jshint.tmbundle
+	 */
+	if (body.length > 0) {
+		fs.readFile(__dirname + '/output.html', 'utf8', function(e, html) {
+			sys.puts(html.replace('{body}', body));
+			process.exit(205); //show_html
+		});
+	}
 };
