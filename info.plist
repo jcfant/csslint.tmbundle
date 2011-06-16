@@ -6,16 +6,11 @@
 	<string>CSSLint</string>
 	<key>description</key>
 	<string>Runs CSSLint upon saves of .css files. Requires an installed version of NodeJS</string>
-	<key>ordering</key>
-	<array>
-		<string>7DEE5D9A-86F4-4F1C-933A-7CC7207BBF1E</string>
-		<string>81189643-4660-4991-B47D-9992CBAD856C</string>
-	</array>
 	<key>uuid</key>
 	<string>5D72E899-2351-42E7-9F82-A36223C59EE4</string>
 	<key>contactEmailRot13</key>
 	<string>jcfant@gmail.com</key>
 	<key>contactName</key>
-	<string>JC Fant</key>
+	<string>JC Fant</string>
 </dict>
 </plist>
