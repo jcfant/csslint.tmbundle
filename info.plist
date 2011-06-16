@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>CSSLint</string>
+	<key>ordering</key>
+	<array>
+		<string>7DEE5D9A-86F4-4F1C-933A-7CC7207BBF1E</string>
+		<string>81189643-4660-4991-B47D-9992CBAD856C</string>
+	</array>
+	<key>uuid</key>
+	<string>5D72E899-2351-42E7-9F82-A36223C59EE4</string>
+</dict>
+</plist>
