@@ -4,7 +4,7 @@ Forked orignally from [JSHint TM Bundle](https://github.com/fgnass/jshint.tmbund
 
 TextMate bundle for [CSSLint](http://csslint.net/)
 
-![Screenshot](https://github.com/downloads/fgnass/fgnass.github.com/jslint.png)
+![Screenshot](https://github.com/jcfant/images/raw/master/CSSLintTMBundle.jpg)
 
 Features:
 
