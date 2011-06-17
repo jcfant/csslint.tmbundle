@@ -1,16 +1,19 @@
 #!/usr/local/bin/node
 var env = process.env || process.ENV,
-	http = require('http'),
+	http = require('https'),
 	fs = require('fs'),
 	sys = require('sys'),
 	stdout  = process.stdout,
-	cssLintFile = env.TM_BUNDLE_SUPPORT + "/csslint.js";
+	cssHost = "raw.github.com", 
+	cssFile = "csslint-node.js",
+	cssPath = "/stubbornella/csslint/master/build/", 
+	cssLintFile = env.TM_BUNDLE_SUPPORT + "/" + cssFile;
 
 
 /*
- * Original version of  an html escape from jshint.tmbundle
+ * Based on original version of an html escape from jshint.tmbundle
  */
-var entities = {
+var htmlConvert = {
   '&': '&amp;',
   '"': '&quot;',
   '<': '&lt;',
@@ -18,32 +21,40 @@ var entities = {
 };
 
 function html(s) {
-  return (s || '').replace(/[&"<>]/g, function(c) {return entities[c] || c;});
+  return (s) ? s.replace(/[&"<>]/g, function(ch) { return htmlConvert[ch] || ch; }) : '';
 }
 
 /*
  * Download the latest CSSLint file.
  */
 
-function getLatest(callback){
-	var request = http.get({host: "csslint.net", port: 80, path: "/js/csslint.js"}, function(response){
+function getLatestJS(callback){
+	var request = http.get({host: cssHost, port: 443, path: cssPath + cssFile}, function(response){
 		if (response.statusCode == 200){
 			response.setEncoding("utf8");
-			var d = "var CSSLint = (function(){";
+			var d = "";
 			response.on('data', function(chunk) { d += chunk; });
-			response.on('end', function() { d += '});'; fs.writeFile(cssLintFile, d, callback); });
+			response.on('end', function() { fs.writeFile(cssLintFile, d, callback); });
 		}else{
-			callback('Bad HTTP Status Code: ' + html(response.statusCode));
+			callback('Bad HTTP Status Code: ' + response.statusCode);
 		}
 	}).on('error', function(error){
-		callback('Failed to get latest CSSLint.js: ' + html(error.message));
+		callback('Failed to get latest CSSLint.js: ' + error.message);
 	});
 }
 
-function hasLatest(callback){
+function hasLatestJS(callback){
 	fs.stat(cssLintFile, function(error, stats){
-		if (error || (Date.now() - Date.parse(stats.mtime)) / 1000 / 60 / 60 / 24 >= 7){
-			getLatest(callback);
+		if (error){
+			getLatestJS(callback);
+			return;
+		}
+		
+		var aDate = Date.parse(stats.atime);
+		var mDate = Date.parse(stats.mtime);
+		var lDate = aDate < mDate ? aDate : mDate;
+		if ((Date.now() - lDate) / 1000 / 60 / 60 / 24 >= 7){
+			getLatestJS(callback);
 		}else{
 			callback();
 		}
@@ -51,7 +62,7 @@ function hasLatest(callback){
 }
 
 module.exports = function(options) {
-	hasLatest(function(error){
+	hasLatestJS(function(error){
 		if (options === undefined)
 			options = {};
 			
