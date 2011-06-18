@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>#!/usr/local/bin/node
+	<string>#!/usr/bin/env node
 
 var env = process.env || process.ENV,
 CSSLint = require(env.TM_BUNDLE_SUPPORT + "/csslint-tm");
