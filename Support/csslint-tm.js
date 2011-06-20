@@ -1,4 +1,4 @@
-#!/usr/local/bin/node
+#!/usr/bin/env node
 var env = process.env || process.ENV,
 	http = require('https'),
 	fs = require('fs'),
