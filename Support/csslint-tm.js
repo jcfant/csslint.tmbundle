@@ -2,7 +2,7 @@
 var env = process.env || process.ENV,
 	http = require('https'),
 	fs = require('fs'),
-	sys = require('sys'),
+	util = require('util'),
 	port = "443",
 	stdout  = process.stdout,
 	showVersionMessage = false,
@@ -112,7 +112,7 @@ function hasLatestJS(callback){
 function hasLatestVersion(callback){
 	fs.stat(cssTMFile, function(error, stats){
 		if (error){
-			//sys.puts(error);
+			//util.puts(error);
 			versionUpdate.callback = callback;
 			getLatest(version, cssPath + cssVersion,  cssTempFile);
 			return;
@@ -191,7 +191,7 @@ module.exports = function(options) {
 			 */
 			if (body.length > 0) {
 				fs.readFile(__dirname + '/output.html', 'utf8', function(e, html) {
-					sys.puts(html.replace('{body}', body));
+					util.puts(html.replace('{body}', body));
 					process.exit(205); //show_html
 				});
 			}
