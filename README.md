@@ -27,8 +27,10 @@ Features:
 
 ## Installation
 
-Download the [zip file](http://github.com/stefanmelnychenko/csslint.tmbundle/zipball/master) and rename the
-extracted folder to `csslint.tmbundle`. Double-click.
+	cd ~/Library/Application\ Support/TextMate/Bundles
+	git clone git://github.com/stefmikhail/csslint.tmbundle.git "CSSLint.tmbundle"
+	osascript -e 'tell app "TextMate" to reload bundles'
+
 
 ## Prerequisites
 
