@@ -55,7 +55,7 @@ function versionsMatch(tmContents, tempContents, callback){
 		cssTMContents = String(cssTMContents).replace(/^\s+|\s+$/, '');
 		if (error)
 			callback(false);
-			
+
 		fs.stat(cssTempFile, function(error, stats){
 			if (error){
 				callback(false);
@@ -97,7 +97,7 @@ function hasLatestJS(callback){
 			getLatest(callback, cssPath + cssFile, cssLintFile);
 			return;
 		}
-		
+
 		var aDate = Date.parse(stats.atime);
 		var mDate = Date.parse(stats.mtime);
 		var lDate = aDate < mDate ? aDate : mDate;
@@ -117,13 +117,13 @@ function hasLatestVersion(callback){
 			getLatest(version, cssPath + cssVersion,  cssTempFile);
 			return;
 		}
-		
+
 		versionUpdate.callback = callback;
 		fs.stat(cssTempFile, function(error){
 			if (error){
 				getLatest(version, cssPath + cssVersion,  cssTempFile);
 			}
-			
+
 			var aDate = Date.parse(stats.atime);
 			var mDate = Date.parse(stats.mtime);
 			var lDate = aDate < mDate ? aDate : mDate;
@@ -143,24 +143,24 @@ module.exports = function(options) {
 		hasLatestJS(function(error){
 			if (options === undefined)
 				options = {};
-			
+
 			var file = env.TM_FILEPATH;
 			var input = fs.readFileSync(file, 'utf8');
 			var CSSLint = require(cssLintFile).CSSLint;
 
 			var result = CSSLint.verify(input);
 			var messages = result.messages;
-		
+
 			var body = "";
-		
+
 			if (messages.length){
 				if (showVersionMessage){
 					body += '<div class="cssHeader">' + versionMessage + '</div>';
 				}
-			    if (error){
-				    body += '<div class="cssHeader">' + error + '</div>';
-			    }
-		
+				if (error){
+					body += '<div class="cssHeader">' + error + '</div>';
+				}
+
 				if (options.rollup){
 					//rollups at the bottom
 					messages.sort(function(a, b){
@@ -175,17 +175,43 @@ module.exports = function(options) {
 				}
 
 				messages.forEach(function(message,i){
-					var link = 'txmt://open?url=file://' + escape(file) + '&line=' + message.line;
-					body += "<div class=\"entry " + message.type + "\"><a href=\"" + link + "\">";
-					body += "<div class=\"header " + message.type + "\">" + message.type + "</div>";
-					body += "<div class=\"message\">" + html(message.message) + "</div>";
-					body += "<div class=\"evidence\">" + html(message.evidence) + "</div>";
-					body += '</a>';
-					body += "</div>";
+					var temp = '',
+						link = 'txmt://open?url=file://' + escape(file) + '&line=' + message.line + '&column=' + message.col;
+					if (message && message.line && message.col && message.message) {
+						temp += '<div class="entry ' + message.type + '"><a href="' + link + '">';
+						temp += '<div class="header ' + message.type + '">' + message.message;
+						temp += '<span class="line"> Line ' + message.line + ' Char ' + message.col + '</span></div>';
+						if (message.evidence && !isNaN(message.col)) {
+							temp += '<div class="evidence">';
+							temp += html(message.evidence.substring(0, message.col-1));
+							temp += '<em>';
+							temp += (message.col <= message.evidence.length) ? html(message.evidence.substring(message.col-1, message.col)) : '&nbsp;';
+							temp += '</em>';
+							temp += html(message.evidence.substring(message.col));
+							temp += '</div>';
+						};
+						temp += '<div class="desc">' + message.rule.desc + '</div>';
+						temp += '</a>';
+						temp += '</div>';
+						// Insert our 'error' messages at the top of the list
+						if(message.type === "error"){
+							body = temp + body;
+						} else {
+							body += temp;
+						}
+						// For sections that only contain a message - e.g general suggestion errors
+					} else if (message.message) {
+						temp += '<div class="entry ' + message.type + '"><a href="txmt://open?url=file://' + escape(file) + '">';
+						temp += '<div class="header ' + message.type + '">' + message.message + '</div>';
+						temp += '<div class="desc">' + message.rule.desc + '</div>';
+						temp += '</a>';
+						temp += '</div>';
+						body += temp;
+					};
 				});
 			}
 
-		
+
 			/*
 			 * Original version of  writing the error messages to TextMate from jshint.tmbundle
 			 */
