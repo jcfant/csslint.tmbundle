@@ -17,6 +17,8 @@ This Fork differs in several ways from jcfant's:
 	* And a description of the rule in question is also displayed.
 
 
+![Screenshot](https://github.com/stefmikhail/csslint.tmbundle/raw/master/cssLintTMBundle.png)
+
 
 Features:
 
